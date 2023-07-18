@@ -39,14 +39,13 @@
                 <img src="images/logo.png" width="32" height="32" alt="">
                 PythonBin
             </a>
-            
             <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarCollapse"
                     aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
             <div class="collapse navbar-collapse" id="navbarCollapse">
                 <ul class="navbar-nav mr-auto">
-                    <li class="form-inline"><a class="btn btn-outline-secondary" href="{% url 'add_snippets' %}">Добавить сниппет</a></li>
+                    
                     <li class="form-inline"><a class="btn btn-outline-info" href="{% url 'snippets_page' %}">Посмотреть
                         сниппеты</a></li>
                 </ul>
@@ -59,7 +58,7 @@
 <main role="main" class="mt-3 flex-shrink-0">
     <div class="container">
         <div class="row">
-            <div class="col text-center">
+            <div class="col">
                 <h1>{{ pagename }}</h1>
                 <hr>
             </div>
@@ -67,71 +66,51 @@
 
         <div class="row">
             <div class="col">
-                <p>На данной страницы будут отображаться все созданные сниппеты.</p>
-                
-                <hr>
-            </div>
-        </div>
-
-        <div class="row">
-            <div class="col">
-                <table class="table table-striped">
-                    <thead class="thead-dark">
-                    <tr>
-                        <th scope="col">ID</th>
-                        <th scope="col">Название</th>
-                        <th scope="col">Дата создания</th>
-                        <th scope="col">Скрытые</th>
-                        <th scope="col">Удалить</th>
-                        <th scope="col">Изменить</th>
-                    </tr>
-                    </thead>
-                    <tbody>
-
-                    {% for snippet in snippets %}    
-                    <tr>
-                        <td scope="row">{{snippet.id}}</td>
-                        <td><a href="{% url 'snippet_1' %}">{{snippet.name}}</a></td>
-                        <td>{{snippet.creation_date}}</td>
-                        <td>
-                            {% if snippet.hide %}
-                            <form action="snippet_switch/{{snippet.id}}">
-                                <input type="submit" value="Не прятать" />
-                            </form>
-                            {% else %}
-                            <form action="snippet_switch/{{ snippet.id }}">
-                                <input type="submit" value="Спрятать" />
-                            </form>
-                        {% endif %}
-                        </td>
-
-                        <td>
-                            <form action="delete/{{ snippet.id }}">
-                                <input type="submit" value="Удалить"/>
-                            </form>
-                        </td>
+                <form action="/snippets/change" method="post">
+                    {% csrf_token %}
+                    
+                    <div class="form-group row">
                         
-                        <td>
-                            <form action="edit/{{ snippet.id }}">
-                                <input type="submit" value="Отредактировать"/>
-                            </form>
-                        </td>
-                    </tr>
-                    {% endfor %}
+                        <div class="col-8">
+                            <input type="text" name="name" class="form-control form-control-lg" placeholder="Название сниппета">
+                            
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <div class="col-8">
+                            
+                            <select class="form-control" name="lang">
+                                <option>Python</option>
+                                <option>C++</option>
+                                <option>JavaScript</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <div class="col-8">
+                            <textarea cols="96" rows="10" placeholder="Код сниппета"></textarea>
+                            
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <div class="col-8">
+                            <input type="submit" class="btn btn-primary btn-block" value="Сохранить">
+                        </div>
+                    </div>
+                    {{snippet.hide.false}}
+                    {{snippet.is_public.true}}
+                </form>
 
-                    </tbody>
-                </table>
-                <div align="right">
-                    <i style="color: gray;">Всего сниппетов: {{snippets.count}}</i>
-                </div>
             </div>
         </div>
     </div>
 </main>
 
 <footer class="footer mt-auto py-3">
+    <div class="container">
     <span class="text-muted">&copy; Перекалов Николай, {% now "Y" %}. <br>
         </span>
+    </div>
 </footer>
 
 <!-- Optional JavaScript -->
